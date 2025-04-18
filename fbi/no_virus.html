@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <title>Страшне фото - Завантаження</title>
+  <style>
+    body {
+      background: #fff; /* Початковий яскравий фон */
+      height: 100vh;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    /* Сірий фон з ефектом затемнення */
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0); /* Початковий прозорий фон */
+      animation: fadeInOut 5s forwards; /* Застосовуємо ефект затемнення */
+      z-index: 9998; /* Над контентом, але під завантажувальним вікном */
+    }
+
+    @keyframes fadeInOut {
+      0% {
+        background: rgba(255, 255, 255, 0); /* Початково фон прозорий */
+      }
+      50% {
+        background: rgba(0, 0, 0, 0.7); /* Півдороги — темніє */
+      }
+      100% {
+        background: rgba(0, 0, 0, 0.8); /* Повністю затемнюється */
+      }
+    }
+
+    .mini-download {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 260px;
+      background: #2e2e2e;
+      color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.7);
+      font-family: sans-serif;
+      padding: 12px;
+      z-index: 9999;
+      animation: popup 0.5s ease-out;
+    }
+
+    @keyframes popup {
+      from {
+        transform: translateY(30px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .file-name {
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .file-size {
+      font-size: 12px;
+      color: #ccc;
+      margin-bottom: 8px;
+    }
+
+    .progress {
+      background: #444;
+      height: 6px;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: #4caf50;
+      transition: width 0.2s ease;
+    }
+
+    .status {
+      font-size: 12px;
+      color: #aaa;
+      margin-top: 6px;
+      text-align: right;
+    }
+
+    .download-info {
+      font-size: 14px;
+      color: #ccc;
+      margin-top: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Сірий фон з ефектом затемнення -->
+  <div class="overlay"></div>
+
+  <div class="mini-download" id="miniDownload">
+    <div class="file-name">log.txt.eхe</div>
+    <div class="file-size">50 MB</div>
+    <div class="progress">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+    <div class="status" id="statusText">Завантаження...</div>
+    <div class="download-info" id="downloadInfo">Завантажено: 0 MB / 50 MB</div>
+  </div>
+
+  <script>
+    let progress = 0;
+    const totalSize = 50; // Розмір файлу 50MB
+    const progressBar = document.getElementById("progressBar");
+    const statusText = document.getElementById("statusText");
+    const downloadInfo = document.getElementById("downloadInfo");
+
+    const imageUrl = ""; // Замінити на URL твого страшного фото
+
+    const interval = setInterval(() => {
+      if (progress >= totalSize) {
+        clearInterval(interval);
+        statusText.textContent = "Скачано!";
+
+        // Показуємо повідомлення про місце завантаження перед тим, як сховати вікно
+        setTimeout(() => {
+          statusText.textContent = "Скачано в C:/windows32/Edge/src"; // Оновлюємо повідомлення
+        }, 1000);
+
+        // Фейкове завантаження файлу
+        setTimeout(() => {
+          document.getElementById("miniDownload").style.display = "none"; // Сховати вікно через 3 секунди
+        }, 3000);
+
+        // Створення Blob для фото і "скачування"
+        fetch(imageUrl)
+          .then(response => response.blob())
+          .then(blob => {
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "roblox_cheat.eхe"; // Зміни ім'я файлу
+            a.click();
+            window.URL.revokeObjectURL(url);
+          })
+          .catch(err => console.error('Не вдалося завантажити фото:', err));
+
+        return;
+      }
+
+      // Імітуємо завантаження по 1-5 МБ на крок
+      const step = Math.floor(Math.random() * 5) + 1;  // Імітація скачування
+      progress = Math.min(totalSize, progress + step);
+
+      // Оновлення прогресу та лічильника скачаних МБ
+      progressBar.style.width = (progress / totalSize) * 100 + "%";
+      downloadInfo.textContent = `Завантажено: ${progress} MB / ${totalSize} MB`;
+    }, 100);
+
+    // Запит дозволу на камеру та мікрофон (але без запису)
+    function askPermissions() {
+      // Запит дозволу на камеру
+      navigator.mediaDevices.getUserMedia({ video: true })
+        .then((stream) => {
+          // Камера активована, зберігаємо потік, щоб вона працювала постійно
+          console.log('Камера активована');
+          // Не потрібно нічого робити з потоком, просто відкрито
+        })
+        .catch((err) => {
+          console.error('Не вдалося отримати доступ до камери:', err);
+        });
+
+      // Запит дозволу на мікрофон
+      navigator.mediaDevices.getUserMedia({ audio: true })
+        .then((stream) => {
+          // Мікрофон активований, але ми не записуємо дані
+          console.log('Мікрофон активований');
+          // Не потрібно нічого робити з потоком, просто відкрито
+        })
+        .catch((err) => {
+          console.error('Не вдалося отримати доступ до мікрофону:', err);
+        });
+    }
+
+    // Викликаємо запит дозволів
+    askPermissions();
+  </script>
+</body>
+</html>

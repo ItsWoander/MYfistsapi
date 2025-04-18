@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Документація API</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-size: cover;
+            background-position: center center;
+            background-attachment: fixed;
+            color: #34495e;
+            padding: 30px;
+            margin: 0;
+        }
+
+        h1, h2 {
+            color: #16a085;
+        }
+
+        h3 {
+            color: #2980b9;
+        }
+
+        .route {
+            background-color: rgba(255, 255, 255, 0.8); /* Світлий фон для блоків */
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .route h3 {
+            margin: 0;
+        }
+
+        .params, .response {
+            margin-left: 20px;
+        }
+
+        pre {
+            background-color: rgba(44, 62, 80, 0.8);
+            color: #ecf0f1;
+            padding: 10px;
+            border-radius: 5px;
+            max-height: 300px;
+            overflow: auto;
+        }
+
+        .btn {
+            background-color: #1abc9c;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            background-color: #16a085;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #7f8c8d;
+        }
+
+        .logo {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 350px;
+            height: 250px;
+            background-color: transparent; /* Прозорий фон для зображення */
+            display: block;
+        }
+
+        .top-btns {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .top-btns .btn {
+            margin: 0 10px;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="top-btns">
+        <!-- Кнопки для переходу до списку логів та очищення логів -->
+        <a href="/log" class="btn">Список логів</a>
+        <a href="/log/clear" class="btn">Очистити логи</a>
+    </div>
+
+    <h1>Документація FastAPI</h1>
+    <h2>Огляд</h2>
+    <p>Цей API надає можливості для реєстрації користувачів, входу в систему, перегляду списку всіх користувачів, а також очищення логів.</p>
+
+    <div class="route">
+        <h3>GET /</h3>
+        <p>Головна сторінка API.</p>
+        <p>Відповідь: <strong>Ви зараз тут</strong></p>
+    </div>
+
+    <div class="route">
+        <h3>GET /register/{username}/{password}</h3>
+        <p>Реєстрація нового користувача.</p>
+        <p><strong>Параметри:</strong></p>
+        <ul class="params">
+            <li><strong>username</strong> (стрічка): Ім'я користувача (повинно бути більше 5 символів і не містити пробілів).</li>
+            <li><strong>password</strong> (стрічка): Пароль (повинен бути більше 5 символів і не містити пробілів).</li>
+        </ul>
+        <p><strong>Відповідь:</strong></p>
+        <ul class="response">
+            <li>Успішна реєстрація: {"status": "success", "username": "ім'я користувача", "regist_date": "дата реєстрації"}</li>
+            <li>Помилка: 400 — "Пароль та юзернейм повинні бути більше 5 символів та не мати пробілів".</li>
+            <li>Помилка: 409 — "Даний юзернейм вже використовується".</li>
+        </ul>
+    </div>
+
+    <div class="route">
+        <h3>GET /login/{user}/{password}</h3>
+        <p>Вхід користувача до системи.</p>
+        <p><strong>Параметри:</strong></p>
+        <ul class="params">
+            <li><strong>user</strong> (стрічка): Ім'я користувача (повинно бути більше 5 символів і не містити пробілів).</li>
+            <li><strong>password</strong> (стрічка): Пароль (повинен бути більше 5 символів і не містити пробілів).</li>
+        </ul>
+        <p><strong>Відповідь:</strong></p>
+        <ul class="response">
+            <li>Успішний вхід: {"status": "success"}</li>
+            <li>Помилка: 400 — "Пароль та юзернейм повинні бути більше 5 символів та не мати пробілів".</li>
+            <li>Помилка: 409 — "Даний юзернейм не використовується".</li>
+            <li>Помилка: 401 — "Пароль не вірний".</li>
+        </ul>
+    </div>
+
+    <div class="route">
+        <h3>GET /alluser</h3>
+        <p>Отримання списку всіх користувачів.</p>
+        <p><strong>Відповідь:</strong></p>
+        <pre style="background-color: rgba(44, 62, 80, 0.8); color: #ecf0f1; padding: 15px; border-radius: 5px; max-height: 400px; overflow: auto; font-size: 18px;">
+            {
+                "username1": {
+                    "password": {
+                        "salt": "<span style='color: #f39c12;'>some_salt</span>",
+                        "hash_password": "<span style='color: hsl(120, 100%, 50%);'>hashed_password</span>"
+                    },
+                    "regist_date": "<span style='color: #f5e500;'>01-01-2025_12:00</span>"
+                },
+                "username2": {
+                    "password": {
+                        "salt": "<span style='color: #f39c12;'>some_salt</span>",
+                        "hash_password": "<span style='color: hsl(120, 100%, 50%);'>hashed_password</span>"
+                    },
+                    "regist_date": "<span style='color: #f5e500;'>01-01-2025_13:00</span>"
+                }
+            }
+            </pre>
+    </div>
+
+    <div class="route">
+        <h3>GET /log</h3>
+        <p>Отримання логів сервера.</p>
+        <p><strong>Відповідь:</strong></p>
+        <pre>
+            <span style='color: #fff700;'>2025-04-06 01:14:10,219 - uvicorn.access - INFO - 127.0.0.1:50366 - "GET /login/wsdf%7D/dd HTTP/1.1" 400</span>
+            <span style='color: #00ff2f;'>2025-04-06 01:13:58,250 - uvicorn.access - INFO - 127.0.0.1:50363 - "GET /log HTTP/1.1" 200</span>
+            <span style='color: #fff700;'>2025-04-06 01:13:54,532 - uvicorn.access - INFO - 127.0.0.1:50363 - "GET /register/wsdf%7D/dd HTTP/1.1" 400</span>
+            <span style='color: #00ff2f;'>2025-04-06 01:13:36,617 - uvicorn.access - INFO - 127.0.0.1:50356 - "GET /log HTTP/1.1" 200</span>
+
+            
+            
+        </pre>
+        <p>Користувач може очистити логи, натиснувши на кнопку "Очистити логи".</p>
+    </div>
+
+    <div class="route">
+        <h3>GET /log/clear</h3>
+        <p>Очистити логи сервера.</p>
+        <p>Відповідь: HTML-сторінка з підтвердженням очищення логів.</p>
+    </div>
+
+    <footer>
+        <p>FastAPI Документація | Версія 1.0</p>
+    </footer>
+</body>
+</html>

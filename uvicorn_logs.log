@@ -1,0 +1,1 @@
+2025-04-18 12:29:31,409 - uvicorn.access - INFO - 127.0.0.1:62356 - "GET /log/clear HTTP/1.1" 200
